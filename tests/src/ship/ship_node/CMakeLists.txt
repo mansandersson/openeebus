@@ -71,6 +71,16 @@ else()
   set(LIBWEBSOCKETS_TARGET PkgConfig::LIBWEBSOCKETS)
 endif()
 
+# OpenSSL Library (required for tls_certificate.c)
+find_package(OpenSSL REQUIRED)
+if(APPLE)
+  set(OPEN_SSL_LIBRARIES OpenSSL::Crypto)
+elseif(WIN32)
+  set(OPEN_SSL_LIBRARIES libssl libcrypto)
+else()
+  set(OPEN_SSL_LIBRARIES crypto)
+endif()
+
 target_sources(
   ${TEST_NAME}
   PRIVATE
@@ -133,4 +143,5 @@ target_link_libraries(
   ${THREAD_LIBRARY}
   ${DNS_SD_LIB}
   ${LIBWEBSOCKETS_TARGET}
+  ${OPEN_SSL_LIBRARIES}
 )
